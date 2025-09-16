@@ -1,0 +1,284 @@
+:root{
+  --bg-1:#0f172a;           /* 深色背景 */
+  --bg-2:#111827;
+  --accent:#7c3aed;         /* 主色：紫 */
+  --accent-2:#06b6d4;       /* 辅色：青 */
+  --text:#e5e7eb;           /* 文本 */
+  --muted:#9ca3af;          /* 次要文本 */
+  --glass: rgba(255,255,255,0.08);     /* 玻璃层 */
+  --glass-border: rgba(255,255,255,0.20);
+  --shadow: 0 8px 40px rgba(0,0,0,.50);
+}
+
+body{
+  color: var(--text);
+  background: var(--bg-1);
+}
+
+/* 全屏柔和渐变背景 + 噪点 */
+.bg{
+  position: fixed; inset: 0; z-index: -1;
+  background:
+    radial-gradient(1200px 800px at 80% -10%, rgba(124,58,237,.30), transparent 60%),
+    radial-gradient(1000px 700px at -10% 20%, rgba(6,182,212,.25), transparent 50%),
+    linear-gradient(180deg,var(--bg-1),var(--bg-2));
+  pointer-events: none;
+  filter: saturate(110%);
+}
+
+/* 玻璃效果 */
+.glass{
+  background: var(--glass);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+
+/* 布局 */
+.nav{
+  max-width: 1200px;
+  margin: 24px auto 0;
+  padding: 14px 18px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.brand{ display:flex; gap:10px; align-items:center; font-weight:800; letter-spacing:.2px; }
+.brand .dot{ width:12px; height:12px; border-radius:50%; background: linear-gradient(135deg,var(--accent),var(--accent-2)); box-shadow: 0 0 16px rgba(124,58,237,.8); }
+.actions{ display:flex; gap:10px; }
+
+.container{
+  max-width:1200px;
+  margin: 18px auto 50px;
+  display: grid;
+  grid-template-columns: 1.2fr .8fr;
+  grid-template-rows: auto auto;
+  gap: 18px;
+}
+.container .card{ padding:18px; }
+
+/* 当前天气卡横跨两列 */
+.card.current{ grid-column: 1 / span 2; display:flex; justify-content:space-between; align-items:center; }
+.current-left .temp{ font-size: 64px; font-weight:800; line-height:1; }
+.current-left .condition{ margin-top:6px; color: var(--muted); font-weight:600; }
+.current-left .city{ margin-top:10px; font-size:20px; }
+.current-left .time{ margin-top:6px; color: var(--muted); font-size:14px; }
+
+.current-right{ display:flex; gap:26px; }
+.metric .label{ display:block; color:var(--muted); font-size:12px; letter-spacing:.3px; }
+.metric .value{ font-size:20px; font-weight:700; margin-top:4px; }
+
+/* days */
+.days{ grid-column: 1 / span 2; }
+.days .card-title{ margin: 6px 6px 10px; color: var(--muted); }
+.days-grid{
+  display:grid;
+  grid-template-columns: repeat(7, minmax(120px,1fr));
+  gap: 12px;
+}
+.day-card{
+  padding:14px;
+  border-radius:16px;
+  background: var(--glass);
+  border:1px solid var(--glass-border);
+  backdrop-filter: blur(14px);
+}
+.day-card .dow{ font-weight:700; margin-bottom:6px; }
+.day-card .cond{ color: var(--muted); font-size: 12px; margin: 4px 0 10px; height: 30px; }
+.day-card .minmax{ font-weight:700; }
+
+/* 按钮/输入 */
+.input{
+  width: 260px; padding:10px 12px; border-radius:12px;
+  border:1px solid var(--glass-border); outline:none;
+  color: var(--text); background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(10px);
+}
+.input::placeholder{ color: #9aa1ac; }
+
+.btn{
+  padding:10px 14px; border-radius:12px; border:1px solid transparent;
+  color:#fff; cursor:pointer; font-weight:600; letter-spacing:.2px;
+  transition: .2s;
+}
+.btn.primary{
+  background: linear-gradient(135deg,var(--accent),var(--accent-2));
+  box-shadow: 0 4px 18px rgba(124,58,237,.35);
+}
+.btn.primary:hover{ transform: translateY(-1px); }
+.btn.ghost{
+  background: rgba(255,255,255,0.05);
+  border-color: var(--glass-border);
+}
+.btn.ghost:hover{ background: rgba(255,255,255,0.08); }
+
+.card-title{ font-weight:700; margin-bottom:12px; color:#cbd5e1; }
+
+.footer{
+  max-width:1200px; margin: 10px auto 30px;
+  color: var(--muted); font-size:12px; text-align:center;
+}
+
+}
+@media (max-width: 420px) {
+  .card.current {
+    flex-direction: column;   /* 当前天气卡上下堆叠 */
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .current-left .temp {
+    font-size: 56px;          /* 温度字体缩小一点 */
+  }
+
+  .days-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* 每行显示 2 天 */
+  }
+
+  .actions .input {
+    width: 150px;             /* 搜索框窄一点，防止超出屏幕 */
+  }
+}
+/* 手机端点击不出现蓝色高亮、滚动更顺畅 */
+:root {
+  -webkit-tap-highlight-color: transparent;
+}
+html, body {
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
+  overscroll-behavior: none;
+}
+
+/* 让 canvas 自适应宽度（Chart.js 已 responsive） */
+#hourlyChart {
+  width: 100% !important;
+  height: auto !important;
+  max-height: 260px;
+}
+@media (max-width: 980px){
+  .container{ 
+    grid-template-columns: 1fr; 
+    padding: 0 12px;
+  }
+
+  .card.current{ 
+    grid-column: auto; 
+    flex-direction: column; 
+    align-items: flex-start; 
+    gap:14px; 
+  }
+
+  .days-grid { 
+    grid-template-columns: repeat(3, 1fr); 
+  }
+
+  .actions { 
+    gap: 8px; 
+    flex-wrap: wrap; 
+  }
+  .actions .input{ 
+    width: 220px; 
+  }
+}
+@media (max-width: 420px){
+  /* 顶部导航更紧凑，品牌不换行 */
+  .nav { 
+    margin: 16px auto 0; 
+    padding: 12px; 
+    gap: 10px; 
+  }
+  .brand { 
+    gap: 8px; 
+    font-weight: 800; 
+    white-space: nowrap; 
+    font-size: 14px; 
+  }
+  .brand .dot { 
+    width:10px; height:10px; 
+  }
+
+  /* 操作区：纵向堆叠，元素全宽 */
+  .actions { 
+    width: 100%; 
+    flex-direction: column; 
+    align-items: stretch; 
+    gap: 8px; 
+  }
+  .actions .input { 
+    width: 100%; 
+    padding: 10px 12px; 
+    font-size: 14px;
+  }
+  .btn { 
+    width: 100%; 
+    padding: 12px 14px; 
+    font-size: 14px; 
+    border-radius: 12px; 
+  }
+
+  /* 当前天气卡：上下排列，字号适配 */
+  .card.current { 
+    gap: 12px; 
+    padding: 14px; 
+  }
+  .current-left .temp { 
+    font-size: 56px; 
+  }
+  .current-left .condition { 
+    font-size: 13px; 
+  }
+  .current-left .city { 
+    font-size: 18px; 
+  }
+  .current-left .time { 
+    font-size: 12px; 
+  }
+
+  /* 指标区更紧凑 */
+  .current-right { 
+    gap: 18px; 
+  }
+  .metric .label { 
+    font-size: 11px; 
+  }
+  .metric .value { 
+    font-size: 18px; 
+  }
+
+  /* 24 小时卡片留白收紧 */
+  .container .card { 
+    padding: 14px; 
+  }
+
+  /* 未来几天：2 列卡片，触控目标更大 */
+  .days-grid { 
+    grid-template-columns: repeat(2, minmax(0, 1fr)); 
+    gap: 10px; 
+  }
+  .day-card { 
+    padding: 12px; 
+    border-radius: 14px; 
+  }
+  .day-card .cond { 
+    height: auto; 
+    min-height: 24px; 
+    font-size: 12px; 
+  }
+  .day-card .minmax { 
+    font-size: 14px; 
+  }
+
+  /* 页脚更紧凑 */
+  .footer { 
+    font-size: 11px; 
+    margin: 8px auto 20px; 
+    padding: 0 12px; 
+  }
+}
+/* iPhone 刘海安全区留白（可选） */
+@supports (padding: max(0px)) {
+  .nav, .container, .footer {
+    padding-left: max(12px, env(safe-area-inset-left));
+    padding-right: max(12px, env(safe-area-inset-right));
+  }
+}
