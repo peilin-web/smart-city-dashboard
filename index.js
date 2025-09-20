@@ -41,15 +41,14 @@ app.get('/health', (req, res) => {
   res.send('Smart City API is up. Try GET /api/weather?city=Hong%20Kong');
 });
 
-// === NEW: 明确首页路由（用 path.resolve 更稳） ===
-// 如果你的 index.html 在 public 里，就把 'index.html' 改成 'public/index.html'
+// ✅ 根路径返回 public/index.html（仅此改动1）
 app.get('/', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// === NEW: 通配兜底 —— 除了 /api/* 之外的 GET 请求都返回 index.html ===
+// ✅ 通配兜底也返回 public/index.html（仅此改动2）
 app.get(/^\/(?!api\/).*/, (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 // 9) 业务路由（保留你的原有路由）
