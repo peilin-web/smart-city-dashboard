@@ -1,4 +1,4 @@
-// 1) 加载 .env（放最前）
+/// 1) 加载 .env（放最前）
 require('dotenv').config();
 
 // 2) 引入依赖
@@ -20,7 +20,12 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // 6) 静态资源托管（放到 app 创建之后；只保留一次）
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'))); // 原有的，保留
+// === NEW: 兜底静态托管（不搬文件也能访问根目录下的 html/css/js） ===
+app.use(express.static(__dirname));
+// === NEW: 兼容 index.html 中以 /js /css 开头的绝对路径引用 ===
+app.use('/js', express.static(__dirname));
+app.use('/css', express.static(__dirname));
 
 // 7) 全局中间件
 app.use(cors({
@@ -43,8 +48,12 @@ app.use(rateLimit({
 app.get('/health', (req, res) => {
   res.send('Smart City API is up. Try GET /api/weather?city=Hong%20Kong');
 });
+// === NEW: 首页路由，确保打开根路径就返回前端页面 ===
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
-// 9) 业务路由
+// 9) 业务路由（保留你的原有路由）
 app.use('/api/weather', weatherRoutes);
 app.use('/api/favorites', favoritesRoutes);
 
