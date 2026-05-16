@@ -157,8 +157,3 @@ Weather data from Open-Meteo
 
 Data visualization by Chart.js
 
-📄 License
-
-For portfolio and educational purposes only.
-
-⚡ Done — this version is polished, technical, and portfolio-ready.
